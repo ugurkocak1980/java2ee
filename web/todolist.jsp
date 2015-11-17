@@ -4,10 +4,10 @@
     Author     : UKO
 --%>
 
+<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
     <head>
@@ -16,22 +16,37 @@
     </head>
     <body>
         <h1>ToDo-Liste</h1>
-        <form method="post" action="todo">
-            <input type="text" name="item">
-            <input type="submit" value="Hinzufügen">
-            <%
-                List<String> items = (List<String>) session.getAttribute("items");
-                if (items.isEmpty()) {
-            %>
-            <h2>keine Einträge</h2>
-            <% } else {%>
-            <h2>Auf der Liste</h2>
-            <table>
-                <% for (String item : items) {%>
-                <tr><td><%= item%></td></tr>
-                <% }%>
-            </table>
-            <%}%>
-        </form>
+
+        <input type="text" name="item">
+        <input type="submit" value="Hinzufügen">
+        <!--
+        <!--%
+            List<String> items = (List<String>) session.getAttribute("items");
+            if (items.isEmpty()) {
+        %>-->
+        <c:choose>
+            <c:when test="${empty items}">
+                <h2>keine Einträge</h2>
+            </c:when>
+            <c:otherwise>
+                <!--% } else {%-->
+                <h2>Auf der Liste</h2>
+                <table> 
+                    <c:forEach items="items" var="item">
+                        <tr>
+                            <td>
+                                ${item}
+                                <!--%= item%-->
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    <!--% for (String item : items) {%-->
+
+                    <% }%>
+                </table>
+            </c:otherwise>
+        </c:choose>
+        <!--%}%-->
+
     </body>
 </html>
